@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Orbital Command | Analysis Workbench</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#4f5469",
+                        "on-background": "#dfe4fe",
+                        "secondary-container": "#005ac2",
+                        "surface-container-lowest": "#000000",
+                        "inverse-surface": "#faf8ff",
+                        "surface-dim": "#000000",
+                        "outline": "#6f758b",
+                        "on-secondary": "#001e4a",
+                        "on-primary": "#004b56",
+                        "on-tertiary": "#400072",
+                        "secondary-fixed": "#bfd1ff",
+                        "inverse-primary": "#006977",
+                        "primary-fixed-dim": "#1ad0eb",
+                        "primary-fixed": "#3adffa",
+                        "primary-container": "#00cbe6",
+                        "surface-tint": "#3adffa",
+                        "on-secondary-fixed": "#003271",
+                        "on-primary-fixed": "#00363e",
+                        "error-container": "#9f0519",
+                        "on-tertiary-container": "#2e0055",
+                        "surface-container": "#050505",
+                        "primary": "#3adffa",
+                        "background": "#000000",
+                        "surface-container-high": "#0a0a0a",
+                        "secondary-dim": "#699cff",
+                        "on-primary-container": "#003d46",
+                        "outline-variant": "#1a1a1a",
+                        "on-error": "#490006",
+                        "surface-bright": "#111111",
+                        "on-tertiary-fixed-variant": "#53108c",
+                        "error-dim": "#d7383b",
+                        "surface-container-highest": "#111111",
+                        "surface": "#000000",
+                        "on-surface-variant": "#94a3b8",
+                        "tertiary-fixed": "#cd9bff",
+                        "on-secondary-container": "#f7f7ff",
+                        "error": "#ff716c",
+                        "surface-variant": "#050505",
+                        "tertiary-dim": "#be83fa",
+                        "tertiary": "#c890ff",
+                        "surface-container-low": "#050505",
+                        "on-surface": "#f8fafc",
+                        "tertiary-container": "#bc80f8",
+                        "on-primary-fixed-variant": "#005561",
+                        "secondary": "#699cff",
+                        "secondary-fixed-dim": "#a9c4ff",
+                        "tertiary-fixed-dim": "#c488ff",
+                        "on-secondary-fixed-variant": "#004da8",
+                        "primary-dim": "#1ad0eb",
+                        "on-tertiary-fixed": "#270048",
+                        "on-error-container": "#ffa8a3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(5, 5, 5, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(58, 223, 250, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.9);
+        }
+        .sidebar-glass {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .nav-glass {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-black text-on-surface selection:bg-primary/30">
+<!-- TopNavBar Component -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 nav-glass shadow-[0_0_50px_-12px_rgba(58,223,250,0.05)]">
+<div class="text-2xl font-bold tracking-tighter text-cyan-400 font-headline">ORBITAL COMMAND</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-400 font-medium hover:text-slate-200 font-label tracking-wider hover:bg-white/5 transition-all duration-300 px-3 py-1" href="#">Platform</a>
+<a class="text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1 font-label tracking-wider hover:bg-white/5 transition-all duration-300 px-3 py-1" href="#">Insights</a>
+<a class="text-slate-400 font-medium hover:text-slate-200 font-label tracking-wider hover:bg-white/5 transition-all duration-300 px-3 py-1" href="#">Documentation</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold px-6 py-2 rounded-lg text-sm tracking-tight active:opacity-80 transition-all shadow-[0_0_20px_rgba(58,223,250,0.2)]">Command Center</button>
+</nav>
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 top-0 h-full flex flex-col items-center py-20 z-40 w-20 sidebar-glass">
+<div class="flex flex-col gap-1 w-full">
+<div class="flex flex-col items-center py-4 text-slate-500 hover:text-slate-200 hover:bg-white/5 cursor-pointer group transition-all">
+<span class="material-symbols-outlined mb-1">map</span>
+<span class="font-headline text-[10px] uppercase tracking-widest">Map</span>
+</div>
+<div class="flex flex-col items-center py-4 text-slate-500 hover:text-slate-200 hover:bg-white/5 cursor-pointer group transition-all">
+<span class="material-symbols-outlined mb-1">layers</span>
+<span class="font-headline text-[10px] uppercase tracking-widest">Layers</span>
+</div>
+<div class="flex flex-col items-center py-4 text-cyan-400 bg-cyan-400/5 border-r-2 border-cyan-400 cursor-pointer active:scale-90 transition-all duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-headline text-[10px] uppercase tracking-widest">Analysis</span>
+</div>
+<div class="flex flex-col items-center py-4 text-slate-500 hover:text-slate-200 hover:bg-white/5 cursor-pointer group transition-all">
+<span class="material-symbols-outlined mb-1">description</span>
+<span class="font-headline text-[10px] uppercase tracking-widest">Reports</span>
+</div>
+<div class="flex flex-col items-center py-4 text-slate-500 hover:text-slate-200 hover:bg-white/5 cursor-pointer group transition-all">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-headline text-[10px] uppercase tracking-widest">Feedback</span>
+</div>
+</div>
+</aside>
+<!-- Background Map Layer -->
+<main class="ml-20 pt-16 min-h-screen relative overflow-hidden bg-black">
+<div class="absolute inset-0 z-0 grayscale opacity-20 pointer-events-none">
+<img alt="Satellite background" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbwo7B207tVRQfA6x0pmxF7NmxThB6ZleQP4hFFbSM3a-A6K-dcR8rNHjnFRBtXLQd-vcAl-fNsofMQu1aDnkwzWUQ5SXGdXAxdZ1XxlJCN576qy6vd7TkVjwGJS0moIP5iiTdG0GmxiiDowGk1FZtJO7mEbxAPW78hAdJYwOlryNz5lmYkH3t8DuzO3ebv98ygpeMm42HJhldpJSWn-vwGURvNasfljikEfV9zcbmeCmQypLUkisYhApjfYaQdHlwTbyqPhURJqs"/>
+</div>
+<!-- Dashboard Overlay Canvas -->
+<div class="relative z-10 p-8 flex flex-col gap-8 min-h-[calc(100vh-64px)]">
+<!-- Analysis Panel (Glassmorphism Main) -->
+<div class="glass-panel rounded-xl p-8 flex flex-col gap-8">
+<!-- Header Section -->
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-1">
+<span class="text-primary font-label tracking-widest text-xs uppercase opacity-80">Telemetry Intelligence</span>
+<h1 class="text-white font-headline text-4xl font-bold tracking-tight">Analysis Report: ID-294-B</h1>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-outline text-sm">location_on</span>
+<span class="text-on-surface-variant font-label text-sm">Sector 7G: 12.9716° N, 77.5946° E</span>
+</div>
+</div>
+<!-- Risk Badge -->
+<div class="flex flex-col items-end gap-2">
+<div class="bg-error-container/10 border border-error/40 px-6 py-3 rounded flex flex-col items-center shadow-[0_0_30px_rgba(255,113,108,0.15)]">
+<span class="text-error font-headline text-3xl font-extrabold tracking-tighter">HIGH RISK</span>
+<span class="text-on-error-container text-[10px] uppercase tracking-[0.2em] font-bold">Priority Intervention</span>
+</div>
+<div class="flex items-center gap-2 text-tertiary/70">
+<span class="material-symbols-outlined text-sm">sync</span>
+<span class="text-[10px] font-label uppercase tracking-wider">Model: Orbital-V4.2</span>
+</div>
+</div>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Risk Breakdown (Left Column) -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="flex flex-col gap-4">
+<h3 class="text-on-surface-variant font-headline text-sm font-semibold uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 bg-error rounded-full shadow-[0_0_10px_rgba(255,113,108,0.5)]"></span>
+                            Legal &amp; Boundary Flags
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-black/40 border border-white/5 p-5 rounded-lg hover:border-primary/40 transition-all group hover:bg-white/[0.03]">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">gavel</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold">CRITICAL</span>
+</div>
+<h4 class="text-white font-headline text-lg mb-1">Government-acquired land</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Overlap detected with KIADB Phase III acquisition notification (Ref: 2021/B-04).</p>
+</div>
+<div class="bg-black/40 border border-white/5 p-5 rounded-lg hover:border-primary/40 transition-all group hover:bg-white/[0.03]">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">grid_view</span>
+<span class="bg-tertiary/30 text-on-surface px-2 py-0.5 rounded text-[10px] font-bold">WARNING</span>
+</div>
+<h4 class="text-white font-headline text-lg mb-1">Encroachment detected</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Satellite delta shows 14% boundary deviation vs official land records.</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="text-on-surface-variant font-headline text-sm font-semibold uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(58,223,250,0.5)]"></span>
+                            Environmental Compliance
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-black/40 border border-white/5 p-5 rounded-lg hover:border-primary/40 transition-all group hover:bg-white/[0.03]">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">water_drop</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold">CRITICAL</span>
+</div>
+<h4 class="text-white font-headline text-lg mb-1">Flood zone overlap</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Asset intersects with 100-year flood plain topography analysis.</p>
+</div>
+<div class="bg-black/40 border border-white/5 p-5 rounded-lg hover:border-primary/40 transition-all group hover:bg-white/[0.03]">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">forest</span>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-[10px] font-bold">CRITICAL</span>
+</div>
+<h4 class="text-white font-headline text-lg mb-1">Forest buffer zone</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Violation of 100m proximity rule to protected reserve forest area.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Explainability Panel (Right Column) -->
+<div class="lg:col-span-4 bg-white/[0.02] border border-white/5 rounded-lg p-6 flex flex-col gap-6">
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary">psychology</span>
+<h3 class="text-white font-headline text-sm font-bold uppercase tracking-widest">LLM INSIGHTS</h3>
+</div>
+<div class="bg-black border-l-2 border-tertiary p-4 rounded shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
+<p class="text-on-surface leading-relaxed text-sm italic opacity-90">
+                                "This land is high risk because it overlaps with a primary flood zone and a protected forest buffer area, violating the Karnataka KGIS Act. Development here faces mandatory legal rejection."
+                            </p>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-on-surface-variant font-label text-[10px] uppercase tracking-widest font-bold">Feature Importance</h4>
+<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs font-label">
+<span class="text-on-surface opacity-80">Buffer Overlap</span>
+<span class="text-primary font-bold">88%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_8px_rgba(58,223,250,0.5)]" style="width: 88%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-xs font-label">
+<span class="text-on-surface opacity-80">Soil Stability</span>
+<span class="text-tertiary font-bold">12%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 12%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-1 opacity-40">
+<div class="flex justify-between text-xs font-label">
+<span class="text-on-surface">Slope Gradient</span>
+<span class="text-outline font-bold">4%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-outline" style="width: 4%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Feedback Indicator -->
+<div class="mt-auto pt-6 border-t border-white/5">
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(58,223,250,0.8)]"></div>
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">Model Improvement Active</span>
+</div>
+<span class="material-symbols-outlined text-sm text-outline group-hover:text-primary transition-colors">info</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex justify-end items-center gap-4 pt-6 border-t border-white/5">
+<button class="flex items-center gap-2 text-primary font-label text-sm font-bold border border-primary/20 px-6 py-2 rounded-lg hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined text-base">share</span>
+                    Share Dashboard
+                </button>
+<button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold px-8 py-2 rounded-lg text-sm tracking-tight active:opacity-80 transition-all shadow-[0_0_20px_rgba(58,223,250,0.2)]">
+<span class="material-symbols-outlined text-base">picture_as_pdf</span>
+                    Download PDF Report
+                </button>
+</div>
+</div>
+<!-- Contextual Data Strip -->
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<div class="min-w-[240px] bg-white/[0.03] backdrop-blur-xl p-5 rounded-lg flex flex-col gap-1 border border-white/5 shadow-lg">
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">Spectral Integrity</span>
+<span class="text-2xl font-headline text-white font-bold">99.42%</span>
+<div class="mt-2 text-[10px] text-primary flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-xs">trending_up</span> +0.2% vs previous pass
+                </div>
+</div>
+<div class="min-w-[240px] bg-white/[0.03] backdrop-blur-xl p-5 rounded-lg flex flex-col gap-1 border border-white/5 shadow-lg">
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">Cloud Obscurity</span>
+<span class="text-2xl font-headline text-white font-bold">2.1%</span>
+<div class="mt-2 text-[10px] text-primary flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-xs">verified</span> CLEAR SKY OPTIMIZED
+                </div>
+</div>
+<div class="min-w-[240px] bg-white/[0.03] backdrop-blur-xl p-5 rounded-lg flex flex-col gap-1 border border-white/5 shadow-lg">
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">KGIS Compliance Score</span>
+<span class="text-2xl font-headline text-error font-bold">24/100</span>
+<div class="mt-2 text-[10px] text-error flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-xs">report</span> FAILED VALIDATION
+                </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Map Coordinate Overlay -->
+<div class="fixed bottom-6 right-6 z-50 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded font-label text-[10px] tracking-[0.2em] text-cyan-400 flex flex-col gap-2 shadow-2xl">
+<div class="flex justify-between gap-6">
+<span>AZIMUTH: 242.4°</span>
+<span>ELEV: 402KM</span>
+</div>
+<div class="flex justify-between gap-6">
+<span>LAT: 12.9716</span>
+<span>LNG: 77.5946</span>
+</div>
+</div>
+</body></html>
