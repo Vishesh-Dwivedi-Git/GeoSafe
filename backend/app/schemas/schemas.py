@@ -129,3 +129,14 @@ class HealthResponse(BaseModel):
     version: str
     db_connected: bool
     kgis_reachable: bool
+
+
+class AnalyzeLandResponse(BaseModel):
+    risk: Literal["LOW", "MEDIUM", "HIGH"]
+    confidence: float
+    features: dict[str, float]
+    reasoning: list[str]
+    bhuvan_hits: dict[str, bool]
+    centroid_lat: float | None = None
+    centroid_lon: float | None = None
+    area_sqm: float | None = None

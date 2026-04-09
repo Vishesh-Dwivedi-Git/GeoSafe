@@ -7,21 +7,25 @@ from app.config import get_settings
 
 settings = get_settings()
 
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=settings.DEBUG,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-)
+if settings.ENABLE_DATABASE:
+    engine = create_async_engine(
+        settings.DATABASE_URL,
+        echo=settings.DEBUG,
+        pool_pre_ping=True,
+        pool_size=10,
+        max_overflow=20,
+    )
 
-AsyncSessionLocal = async_sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autoflush=False,
-    autocommit=False,
-)
+    AsyncSessionLocal = async_sessionmaker(
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+        autoflush=False,
+        autocommit=False,
+    )
+else:
+    engine = None
+    AsyncSessionLocal = None
 
 
 class Base(DeclarativeBase):
@@ -30,6 +34,8 @@ class Base(DeclarativeBase):
 
 async def get_db() -> AsyncSession:
     """FastAPI dependency — yields an async DB session."""
+    if AsyncSessionLocal is None:
+        raise RuntimeError("Database access requested while ENABLE_DATABASE=false")
     async with AsyncSessionLocal() as session:
         try:
             yield session
@@ -43,6 +49,8 @@ async def get_db() -> AsyncSession:
 
 async def init_db():
     """Create all tables (run once on startup)."""
+    if engine is None:
+        return
     from app.models import spatial, report  # noqa: F401 — ensure models are imported
     async with engine.begin() as conn:
         # Enable PostGIS extension

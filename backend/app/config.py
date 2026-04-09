@@ -15,11 +15,15 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     USE_DEMO_DATA: bool = True
     SECRET_KEY: str = "change-me-in-production"
+    ENABLE_DATABASE: bool = False
 
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/geosafe"
     DATABASE_URL_SYNC: str = "postgresql://postgres:postgres@localhost:5432/geosafe"
 
     # Single geospatial source of truth: KGIS Web APIs.
+    KGIS_WFS_BASE_URL: str = "https://kgis.ksrsac.in/kgis/ows"
+    KGIS_WMS_BASE_URL: str = "https://kgis.ksrsac.in/kgis/wms"
+    KGIS_DATA_SOURCE_MODE: str = "webapi"
     KGIS_WEBAPI_BASE_URL: str = "https://kgis.ksrsac.in:9000/genericwebservices/ws"
     KGIS_NEARBY_ASSETS_BASE_URL: str = "https://kgis.ksrsac.in:9000/NearbyAssets/ws"
     KGIS_API_KEY: Optional[str] = None
@@ -29,15 +33,47 @@ class Settings(BaseSettings):
     KGIS_NEARBY_ASSET_CODE_FLOOD: Optional[str] = None
     KGIS_NEARBY_ASSET_CODE_GOVT_LAND: Optional[str] = None
     KGIS_NEARBY_ASSET_CODE_REVENUE_LAND: Optional[str] = None
+    KGIS_LAYER_WATER_BODIES_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_WATER_BODIES_GEOJSON_URL: Optional[str] = None
+    KGIS_LAYER_FOREST_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_FOREST_GEOJSON_URL: Optional[str] = None
+    KGIS_LAYER_ECO_SENSITIVE_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_ECO_SENSITIVE_GEOJSON_URL: Optional[str] = None
+    KGIS_LAYER_FLOOD_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_FLOOD_GEOJSON_URL: Optional[str] = None
+    KGIS_LAYER_GOVT_LAND_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_GOVT_LAND_GEOJSON_URL: Optional[str] = None
+    KGIS_LAYER_REVENUE_LAND_GEOJSON_PATH: Optional[str] = None
+    KGIS_LAYER_REVENUE_LAND_GEOJSON_URL: Optional[str] = None
+    OVERPASS_API_URL: str = "https://overpass-api.de/api/interpreter"
+    BHUVAN_FOREST_WMS_URL: Optional[str] = None
+    BHUVAN_FOREST_LAYER_NAME: Optional[str] = None
+    BHUVAN_ESZ_WMS_URL: Optional[str] = None
+    BHUVAN_ESZ_LAYER_NAME: Optional[str] = None
+    BHUVAN_FLOOD_WMS_URL: Optional[str] = None
+    BHUVAN_FLOOD_LAYER_NAME: Optional[str] = None
+    BHUVAN_GOVT_LAND_WMS_URL: Optional[str] = None
+    BHUVAN_GOVT_LAND_LAYER_NAME: Optional[str] = None
+    GIS_LAYER_CACHE_TTL_SECONDS: int = 900
+    ANALYZE_BUFFER_M: float = 500.0
+    FALLBACK_POINTS_PATH: str = "data/fallback_points.json"
+    FALLBACK_POINT_RADIUS_M: float = 2500.0
+    ENABLE_KARNATAKA_HEURISTIC_FALLBACK: bool = True
 
     OPENAI_API_KEY: Optional[str] = None
     GOOGLE_API_KEY: Optional[str] = None
     LLM_PROVIDER: str = "gemini"
     LLM_MODEL: str = "gemini-1.5-flash"
 
+    AI_MODEL_PATH: str = "../ml/model.pkl"
+    AI_LABEL_ENCODER_PATH: str = "../ml/label_encoder.pkl"
     ML_MODEL_PATH: str = "ml/models/risk_classifier.pkl"
     SHAP_EXPLAINER_PATH: str = "ml/models/shap_explainer.pkl"
     LABEL_ENCODER_PATH: str = "ml/models/label_encoder.pkl"
+
+    BHUNAKSHA_BASE_URL: str = "https://bhunaksha.karnataka.gov.in"
+    DHARITRI_BASE_URL: str = "https://landrecords.karnataka.gov.in"
+    NOMINATIM_URL: str = "https://nominatim.openstreetmap.org"
 
     REPORTS_DIR: str = "reports"
     MAPBOX_TOKEN: Optional[str] = None
@@ -52,6 +88,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
     @field_validator("DEBUG", mode="before")
     @classmethod

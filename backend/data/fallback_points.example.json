@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Sample Forest Point",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "radius_m": 2500,
+    "layers": {
+      "forest": true,
+      "esz": false,
+      "flood": false,
+      "government_land": false,
+      "water": true
+    },
+    "water_distance_m": 120,
+    "attributes": {
+      "forest": {
+        "source": "manual_fallback",
+        "label": "Sample forest fallback"
+      }
+    }
+  }
+]
