@@ -1,0 +1,611 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+@import "@xyflow/react/dist/style.css";
+
+/* === Leaflet Map Overrides === */
+.leaflet-container {
+  background: #000 !important;
+  font-family: var(--font-body) !important;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+  background: transparent !important;
+  color: #3adffa !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 18px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(58, 223, 250, 0.1) !important;
+}
+
+.custom-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.map-pulse-marker {
+  animation: mapPulse 2s ease-out infinite;
+}
+
+@keyframes markerPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes mapPulse {
+  0% {
+    opacity: 0.6;
+    stroke-width: 2;
+  }
+  50% {
+    opacity: 0.2;
+    stroke-width: 4;
+  }
+  100% {
+    opacity: 0.6;
+    stroke-width: 2;
+  }
+}
+
+@theme inline {
+  /* === Color System: Orbital Command === */
+  --color-background: #000000;
+  --color-foreground: #dfe4fe;
+
+  --color-primary: #3adffa;
+  --color-primary-dim: #1ad0eb;
+  --color-primary-container: #00cbe6;
+  --color-primary-fixed: #3adffa;
+  --color-primary-fixed-dim: #1ad0eb;
+  --color-on-primary: #004b56;
+  --color-on-primary-container: #003d46;
+  --color-on-primary-fixed: #00363e;
+  --color-on-primary-fixed-variant: #005561;
+  --color-inverse-primary: #006977;
+
+  --color-secondary: #699cff;
+  --color-secondary-dim: #699cff;
+  --color-secondary-container: #005ac2;
+  --color-secondary-fixed: #bfd1ff;
+  --color-secondary-fixed-dim: #a9c4ff;
+  --color-on-secondary: #001e4a;
+  --color-on-secondary-container: #f7f7ff;
+  --color-on-secondary-fixed: #003271;
+  --color-on-secondary-fixed-variant: #004da8;
+
+  --color-tertiary: #c890ff;
+  --color-tertiary-dim: #be83fa;
+  --color-tertiary-container: #bc80f8;
+  --color-tertiary-fixed: #cd9bff;
+  --color-tertiary-fixed-dim: #c488ff;
+  --color-on-tertiary: #400072;
+  --color-on-tertiary-container: #2e0055;
+  --color-on-tertiary-fixed: #270048;
+  --color-on-tertiary-fixed-variant: #53108c;
+
+  --color-error: #ff716c;
+  --color-error-dim: #d7383b;
+  --color-error-container: #9f0519;
+  --color-on-error: #490006;
+  --color-on-error-container: #ffa8a3;
+
+  --color-surface: #000000;
+  --color-surface-dim: #000000;
+  --color-surface-bright: #111111;
+  --color-surface-container: #050505;
+  --color-surface-container-low: #050505;
+  --color-surface-container-high: #0a0a0a;
+  --color-surface-container-highest: #111111;
+  --color-surface-container-lowest: #000000;
+  --color-surface-variant: #050505;
+  --color-surface-tint: #3adffa;
+  --color-on-surface: #f8fafc;
+  --color-on-surface-variant: #94a3b8;
+  --color-on-background: #dfe4fe;
+
+  --color-outline: #6f758b;
+  --color-outline-variant: #1a1a1a;
+
+  --color-inverse-surface: #faf8ff;
+  --color-inverse-on-surface: #4f5469;
+
+  /* === Typography === */
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Space Grotesk", sans-serif;
+
+  /* === Border Radius === */
+  --radius-sm: 0.125rem;
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+/* === Base Styles === */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(58, 223, 250, 0.3);
+}
+
+/* === Material Icons === */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* === Glassmorphism Panels === */
+.glass-panel {
+  backdrop-filter: blur(16px);
+  background-color: rgba(5, 5, 5, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.9);
+}
+
+.glass-panel-dark {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(58, 223, 250, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 1);
+}
+
+.sidebar-glass {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.nav-glass {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* === Hero Background === */
+.hero-bg-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
+/* === Scrollbar === */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* === Pipeline Animations === */
+.glow-pulse {
+  box-shadow: 0 0 0 0 rgba(58, 223, 250, 0.4);
+  animation: glow-pulse 2s infinite;
+}
+
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(58, 223, 250, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(58, 223, 250, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(58, 223, 250, 0);
+  }
+}
+
+.pipeline-node {
+  opacity: 0.3;
+  filter: grayscale(1);
+  transition: all 0.5s ease-out;
+}
+
+.pipeline-node.active {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+.pipeline-connector {
+  stroke-dasharray: 8;
+  stroke-dashoffset: 8;
+  transition: stroke-dashoffset 1s linear;
+}
+
+@keyframes flow {
+  from {
+    stroke-dashoffset: 16;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* === Dashboard Animations === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+@keyframes ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(58, 223, 250, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(58, 223, 250, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(58, 223, 250, 0);
+  }
+}
+
+.ripple-effect {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.6s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+/* === Chart Animations === */
+.recharts-wrapper {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.recharts-surface {
+  animation: scaleIn 0.8s ease-out;
+}
+
+/* === Button Animations === */
+.btn-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.btn-hover-scale:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease-out;
+}
+
+.node-pulse {
+  animation: node-glow 2s infinite;
+}
+
+@keyframes node-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px rgba(58, 223, 250, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(58, 223, 250, 0.8));
+  }
+}
+
+/* Pipeline step animations */
+.step-1 { animation: activateNode 7s infinite; }
+.step-2 { animation: activateNode 7s infinite 1s; }
+.step-3 { animation: activateNode 7s infinite 2s; }
+.step-4 { animation: activateNode 7s infinite 3s; }
+.step-5 { animation: activateNode 7s infinite 4s; }
+.step-6 { animation: activateNode 7s infinite 5s; }
+.step-7 { animation: activateNode 7s infinite 6s; }
+
+@keyframes activateNode {
+  0%,
+  14% {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(58, 223, 250, 0.4);
+    border-color: rgba(58, 223, 250, 0.8);
+  }
+  15%,
+  100% {
+    opacity: 0.4;
+    filter: grayscale(1);
+    transform: scale(1);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.line-1 { animation: activateLine 7s infinite; }
+.line-2 { animation: activateLine 7s infinite 1s; }
+.line-3 { animation: activateLine 7s infinite 2s; }
+.line-4 { animation: activateLine 7s infinite 3s; }
+.line-5 { animation: activateLine 7s infinite 4s; }
+.line-6 { animation: activateLine 7s infinite 5s; }
+
+@keyframes activateLine {
+  0%,
+  14% {
+    stroke: #3adffa;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  15%,
+  100% {
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-dashoffset: 16;
+    opacity: 0.2;
+  }
+}
+
+/* === Scan line animation === */
+@keyframes scanLine {
+  0% { top: 10%; }
+  50% { top: 60%; }
+  100% { top: 10%; }
+}
+
+.scan-line {
+  animation: scanLine 4s ease-in-out infinite;
+}
+
+/* === React Flow Pipeline Styles === */
+.react-flow__controls {
+  background: rgba(0, 0, 0, 0.65) !important;
+  border: 1px solid rgba(58, 223, 250, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.react-flow__controls button {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #3adffa !important;
+}
+
+.react-flow__viewport {
+  animation: flowCanvasFloat 6s ease-in-out infinite;
+}
+
+@keyframes flowCanvasFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.pipeline-node-card {
+  width: 148px;
+  border-width: 1.5px;
+  border-radius: 11px;
+  padding: 8px;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 0 20px rgba(24, 29, 38, 0.35), inset 0 0 14px rgba(58, 223, 250, 0.04);
+  animation: nodeFloat 3.6s ease-in-out infinite;
+}
+
+.pipeline-handle {
+  width: 10px !important;
+  height: 10px !important;
+  border: none !important;
+  background: transparent !important;
+  opacity: 0 !important;
+}
+
+.pipeline-node-active {
+  box-shadow: 0 0 24px rgba(58, 223, 250, 0.33), 0 0 42px rgba(58, 223, 250, 0.2), inset 0 0 20px rgba(58, 223, 250, 0.1);
+  animation: nodeSignalPulse 1.2s ease-in-out infinite, nodeFloat 3.2s ease-in-out infinite;
+}
+
+.pipeline-node-done {
+  opacity: 0.62;
+}
+
+.pipeline-node-appear {
+  animation: pipelineNodeAppear 0.3s ease-out;
+}
+
+@keyframes nodeFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pipelineNodeAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes nodeSignalPulse {
+  0% {
+    box-shadow: 0 0 18px rgba(58, 223, 250, 0.2), inset 0 0 14px rgba(58, 223, 250, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 34px rgba(58, 223, 250, 0.42), inset 0 0 22px rgba(58, 223, 250, 0.14);
+  }
+  100% {
+    box-shadow: 0 0 18px rgba(58, 223, 250, 0.2), inset 0 0 14px rgba(58, 223, 250, 0.08);
+  }
+}
+
+.signal-edge-path {
+  stroke-width: 2.1;
+  fill: none;
+  stroke-dasharray: 7 8;
+  stroke-linecap: round;
+  opacity: 0.95;
+  transition: stroke 0.3s ease, opacity 0.3s ease;
+}
+
+.signal-edge-pending {
+  stroke: rgba(82, 97, 118, 0.55);
+  opacity: 0.42;
+}
+
+.signal-edge-active {
+  stroke: rgba(255, 218, 86, 0.95);
+  filter: drop-shadow(0 0 8px rgba(255, 218, 86, 0.75));
+  animation: flowSignal 0.95s linear infinite;
+}
+
+.signal-edge-done {
+  stroke: rgba(58, 223, 250, 0.82);
+  filter: drop-shadow(0 0 6px rgba(58, 223, 250, 0.45));
+  animation: flowSignal 1.4s linear infinite;
+}
+
+.signal-edge-error {
+  stroke: rgba(239, 68, 68, 0.9);
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.45));
+}
+
+.signal-dot {
+  fill: #3adffa;
+  filter: drop-shadow(0 0 6px rgba(58, 223, 250, 0.8));
+}
+
+.signal-dot.signal-edge-active {
+  fill: rgba(255, 218, 86, 1);
+  filter: drop-shadow(0 0 8px rgba(255, 218, 86, 0.9));
+}
+
+.signal-dot.signal-edge-done {
+  fill: rgba(58, 223, 250, 0.95);
+}
+
+.signal-dot.signal-edge-error {
+  fill: rgba(239, 68, 68, 1);
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+}
+
+@keyframes flowSignal {
+  from {
+    stroke-dashoffset: 18;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
